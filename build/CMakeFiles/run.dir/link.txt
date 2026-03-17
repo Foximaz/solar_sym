@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/run.dir/src/test.o -o run 

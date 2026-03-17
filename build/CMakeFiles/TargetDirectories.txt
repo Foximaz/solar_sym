@@ -1,0 +1,3 @@
+/home/foxima/msu/oop/solar_sym/build/CMakeFiles/solar_sym.dir
+/home/foxima/msu/oop/solar_sym/build/CMakeFiles/edit_cache.dir
+/home/foxima/msu/oop/solar_sym/build/CMakeFiles/rebuild_cache.dir

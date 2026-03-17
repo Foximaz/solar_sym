@@ -1,0 +1,14 @@
+{
+    "yaw": 0.0,
+    "pitch": 0.0,
+    "distance": 15.0,
+    "fov": 60.0,
+    "rotationSpeed": 0.04,
+    "zoomSpeed": 0.15,
+    "smoothness": 0.85,
+    "showNames": true,
+    "fontPath": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    "characterSize": 16,
+    "minShow": 4,
+    "iconSize": 6
+}
