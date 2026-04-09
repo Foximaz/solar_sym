@@ -13,6 +13,7 @@ add_executable(solar_sym
     src/rendering.cpp
     src/scene.cpp
     src/load.cpp
+    src/ui.cpp
 )
 
 target_include_directories(solar_sym PRIVATE include)

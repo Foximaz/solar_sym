@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/solar_sym.dir/src/rendering.cpp.o.d"
   "CMakeFiles/solar_sym.dir/src/scene.cpp.o"
   "CMakeFiles/solar_sym.dir/src/scene.cpp.o.d"
+  "CMakeFiles/solar_sym.dir/src/ui.cpp.o"
+  "CMakeFiles/solar_sym.dir/src/ui.cpp.o.d"
   "CMakeFiles/solar_sym.dir/src/utils.cpp.o"
   "CMakeFiles/solar_sym.dir/src/utils.cpp.o.d"
   "solar_sym"

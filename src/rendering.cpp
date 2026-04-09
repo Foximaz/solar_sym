@@ -101,10 +101,15 @@ bool Camera::projectToScreen(const Vector3& worldPos, sf::Vector2f& screenPos, f
 
 void Camera::switchShowNames() { showNames = !showNames; }
 
-void Camera::processInput(float dt, short dYaw, short dPitch, short dDistance, float multiplier) {
-    intentYaw += dYaw * rotationSpeed * multiplier;
-    intentPitch += dPitch * rotationSpeed * multiplier;
-    intentDistance *= (1 + dDistance * zoomSpeed * multiplier);
+bool Camera::getShowNames() const { return showNames; }
+
+void Camera::processInput(float dt, short dYaw, short dPitch, float dDistance, float multiplier) {
+    intentYaw += dYaw * rotationSpeed * multiplier * dt;
+    intentPitch += dPitch * rotationSpeed * multiplier * dt;
+    
+    intentDistance *= (1.0f + dDistance * zoomSpeed * multiplier * dt);
+    
+    clampPitch();
 }
 
 void Camera::setTarget(Object* target) {
@@ -138,7 +143,6 @@ void Camera::update(float dt) {
 }
 
 void Camera::render(std::vector<Object>& objects) {
-    window.clear(sf::Color::Black);
     renderInfos.clear();
 
     std::vector<std::pair<float, Object*>> sorted;
@@ -196,78 +200,4 @@ void Camera::render(std::vector<Object>& objects) {
             }
         }
     }
-    window.display();
-}
-
-Button::Button(
-    sf::Font& font,
-    const std::string& buttonText,
-    sf::Vector2f position,
-    sf::Vector2f size,
-    std::function<void()> callback
-)
-: font(font)
-, onClick(callback)
-, normalColor(sf::Color(100, 100, 250))
-, hoverColor(sf::Color(150, 150, 250))
-, pressedColor(sf::Color(50, 50, 200))
-, isHovered(false)
-, isPressed(false)
-{
-    shape.setPosition(position);
-    shape.setSize(size);
-    shape.setFillColor(normalColor);
-    shape.setOutlineThickness(2);
-    shape.setOutlineColor(sf::Color::Black);
-
-    text.setFont(font);
-    text.setString(buttonText);
-    text.setCharacterSize(20);
-    text.setFillColor(sf::Color::White);
-
-    sf::FloatRect textBounds = text.getLocalBounds();
-    text.setOrigin(textBounds.left + textBounds.width/2.0f,
-        textBounds.top  + textBounds.height/2.0f);
-    text.setPosition(position + size/2.0f);
-}
-
-void Button::handleEvent(const sf::Event& event, const sf::RenderWindow& window) {
-    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
-
-    bool contains = shape.getGlobalBounds().contains(worldPos);
-
-    if (event.type == sf::Event::MouseMoved) {
-        isHovered = contains;
-    }
-
-    if (event.type == sf::Event::MouseButtonPressed) {
-        if (event.mouseButton.button == sf::Mouse::Left && contains) {
-            isPressed = true;
-        }
-    }
-
-    if (event.type == sf::Event::MouseButtonReleased) {
-        if (event.mouseButton.button == sf::Mouse::Left) {
-            if (isPressed && contains && onClick) {
-                onClick();
-            }
-            isPressed = false;
-        }
-    }
-}
-
-void Button::update() {
-    if (isPressed) {
-        shape.setFillColor(pressedColor);
-    } else if (isHovered) {
-        shape.setFillColor(hoverColor);
-    } else {
-        shape.setFillColor(normalColor);
-    }
-}
-
-void Button::draw(sf::RenderWindow& window) {
-    window.draw(shape);
-    window.draw(text);
 }

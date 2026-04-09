@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 Vector3 vector3FromJson(const json& j) {
     return Vector3(j[0].get<double>(), j[1].get<double>(), j[2].get<double>());
@@ -21,6 +22,17 @@ sf::Font fontFromJson(const json& j) {
     if (!font.loadFromFile(path))
         throw std::runtime_error("Cannot load font: " + path);
     return font;
+}
+
+sf::Font load_ui_config(const std::string& filePath) {
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        throw std::runtime_error("Cannot open file: " + filePath);
+    }
+    json data;
+    file >> data;
+
+    return fontFromJson(data["fontPath"]);
 }
 
 std::vector<Object> load_obj_config(const std::string& filePath) {
@@ -56,8 +68,8 @@ Camera load_cam_config(sf::RenderWindow& window, std::vector<Object>& objects, c
     return Camera(
         window,
         &objects[0],
-        data["yaw"].get<float>(),
-        data["pitch"].get<float>(),
+        data["yaw"].get<float>() * M_PI / 180.0,
+        - data["pitch"].get<float>() * M_PI / 180.0,
         data["distance"].get<float>(),
         data["fov"].get<float>(),
         data["rotationSpeed"].get<float>(),

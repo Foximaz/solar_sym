@@ -262,11 +262,11 @@ CMakeFiles/solar_sym.dir/src/rendering.cpp.o: \
  /usr/include/SFML/Graphics/Sprite.hpp \
  /usr/include/SFML/Graphics/Text.hpp \
  /usr/include/SFML/Graphics/VertexBuffer.hpp \
+ /home/foxima/msu/oop/solar_sym/include/object.h \
  /usr/include/c++/13/functional /usr/include/c++/13/bits/std_function.h \
  /usr/include/c++/13/unordered_map \
  /usr/include/c++/13/bits/unordered_map.h \
  /usr/include/c++/13/bits/hashtable.h \
  /usr/include/c++/13/bits/hashtable_policy.h \
  /usr/include/c++/13/bits/enable_special_members.h \
- /usr/include/c++/13/array /usr/include/c++/13/compare \
- /home/foxima/msu/oop/solar_sym/include/object.h
+ /usr/include/c++/13/array /usr/include/c++/13/compare

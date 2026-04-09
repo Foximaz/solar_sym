@@ -3,15 +3,22 @@
 
 #include "object.h"
 #include "rendering.h"
+#include "ui.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include <memory>
 
 class Scene {
 private:
+    const std::string& dictPath;
     sf::RenderWindow& window;
+    sf::Font font;
     std::vector<Object> objects;
-    Camera camera;
+    std::unique_ptr<Camera> camera;
+    std::vector<Button> buttons;
+    TextBox speedDisplay;
+    Button* showNamesButton = nullptr;
 
     double G;
     double softening;
@@ -21,6 +28,11 @@ private:
     double accumulator = 0.0;
     bool pause = false;
 
+    float pendingZoom = 0.0f;
+
+    void initButtons();
+    void updateSpeedDisplay();
+    void updateShowNamesButtonText();
     std::vector<Vector3> computeAccelerations(const std::vector<Object>& objects) const;
 
 public:
@@ -31,6 +43,8 @@ public:
         double softening
     );
 
+    void reload();
+    void handleEvent(const sf::Event& event, sf::RenderWindow& window);
     void processInput(float dt);
     void update(float dt);
     void render();

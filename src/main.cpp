@@ -25,10 +25,12 @@ int main(int argc, char* argv[]) {
     sf::Clock clock;
     while (window.isOpen()) {
         float dt = clock.restart().asSeconds();
+        
+        sf::Event event;
+        while (window.pollEvent(event)) { scene.handleEvent(event, window); }
         scene.processInput(dt);
         scene.update(dt);
         scene.render();
     }
-    
     return 0;
 }

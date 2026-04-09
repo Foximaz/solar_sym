@@ -261,6 +261,7 @@ CMakeFiles/solar_sym.dir/src/scene.cpp.o: \
  /usr/include/SFML/Graphics/Text.hpp \
  /usr/include/SFML/Graphics/VertexBuffer.hpp \
  /home/foxima/msu/oop/solar_sym/include/rendering.h \
+ /home/foxima/msu/oop/solar_sym/include/ui.h \
  /usr/include/c++/13/functional /usr/include/c++/13/bits/std_function.h \
  /usr/include/c++/13/unordered_map \
  /usr/include/c++/13/bits/unordered_map.h \
@@ -268,9 +269,7 @@ CMakeFiles/solar_sym.dir/src/scene.cpp.o: \
  /usr/include/c++/13/bits/hashtable_policy.h \
  /usr/include/c++/13/bits/enable_special_members.h \
  /usr/include/c++/13/array /usr/include/c++/13/compare \
- /home/foxima/msu/oop/solar_sym/include/load.h \
- /home/foxima/msu/oop/solar_sym/include/scene.h \
- /usr/include/nlohmann/json.hpp /usr/include/c++/13/memory \
+ /usr/include/c++/13/memory \
  /usr/include/c++/13/bits/stl_raw_storage_iter.h \
  /usr/include/c++/13/bits/align.h /usr/include/c++/13/bits/unique_ptr.h \
  /usr/include/c++/13/bits/shared_ptr.h \
@@ -281,7 +280,10 @@ CMakeFiles/solar_sym.dir/src/scene.cpp.o: \
  /usr/include/c++/13/bits/atomic_base.h \
  /usr/include/c++/13/bits/atomic_lockfree_defines.h \
  /usr/include/c++/13/backward/auto_ptr.h \
- /usr/include/c++/13/pstl/glue_memory_defs.h /usr/include/c++/13/utility \
+ /usr/include/c++/13/pstl/glue_memory_defs.h \
+ /home/foxima/msu/oop/solar_sym/include/load.h \
+ /home/foxima/msu/oop/solar_sym/include/scene.h \
+ /usr/include/nlohmann/json.hpp /usr/include/c++/13/utility \
  /usr/include/c++/13/bits/stl_relops.h \
  /usr/include/nlohmann/adl_serializer.hpp \
  /usr/include/nlohmann/detail/abi_macros.hpp \
@@ -353,4 +355,5 @@ CMakeFiles/solar_sym.dir/src/scene.cpp.o: \
  /usr/include/c++/13/fstream \
  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
- /usr/include/c++/13/bits/fstream.tcc /usr/include/c++/13/iostream
+ /usr/include/c++/13/bits/fstream.tcc \
+ /home/foxima/msu/oop/solar_sym/include/ui.h /usr/include/c++/13/iostream

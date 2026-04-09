@@ -18,4 +18,6 @@ sf::Color colorFromJson(const json& j);
 std::vector<Object> load_obj_config(const std::string& filePath);
 Camera load_cam_config(sf::RenderWindow& window, std::vector<Object>& objects, const std::string& filePath);
 
+sf::Font load_ui_config(const std::string& filePath);
+
 #endif

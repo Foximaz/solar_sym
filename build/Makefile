@@ -249,6 +249,30 @@ src/scene.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/solar_sym.dir/build.make CMakeFiles/solar_sym.dir/src/scene.cpp.s
 .PHONY : src/scene.cpp.s
 
+src/ui.o: src/ui.cpp.o
+.PHONY : src/ui.o
+
+# target to build an object file
+src/ui.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/solar_sym.dir/build.make CMakeFiles/solar_sym.dir/src/ui.cpp.o
+.PHONY : src/ui.cpp.o
+
+src/ui.i: src/ui.cpp.i
+.PHONY : src/ui.i
+
+# target to preprocess a source file
+src/ui.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/solar_sym.dir/build.make CMakeFiles/solar_sym.dir/src/ui.cpp.i
+.PHONY : src/ui.cpp.i
+
+src/ui.s: src/ui.cpp.s
+.PHONY : src/ui.s
+
+# target to generate assembly for a file
+src/ui.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/solar_sym.dir/build.make CMakeFiles/solar_sym.dir/src/ui.cpp.s
+.PHONY : src/ui.cpp.s
+
 src/utils.o: src/utils.cpp.o
 .PHONY : src/utils.o
 
@@ -297,6 +321,9 @@ help:
 	@echo "... src/scene.o"
 	@echo "... src/scene.i"
 	@echo "... src/scene.s"
+	@echo "... src/ui.o"
+	@echo "... src/ui.i"
+	@echo "... src/ui.s"
 	@echo "... src/utils.o"
 	@echo "... src/utils.i"
 	@echo "... src/utils.s"

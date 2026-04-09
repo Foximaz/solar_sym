@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/foxima/msu/oop/solar_sym/src/object.cpp" "CMakeFiles/solar_sym.dir/src/object.cpp.o" "gcc" "CMakeFiles/solar_sym.dir/src/object.cpp.o.d"
   "/home/foxima/msu/oop/solar_sym/src/rendering.cpp" "CMakeFiles/solar_sym.dir/src/rendering.cpp.o" "gcc" "CMakeFiles/solar_sym.dir/src/rendering.cpp.o.d"
   "/home/foxima/msu/oop/solar_sym/src/scene.cpp" "CMakeFiles/solar_sym.dir/src/scene.cpp.o" "gcc" "CMakeFiles/solar_sym.dir/src/scene.cpp.o.d"
+  "/home/foxima/msu/oop/solar_sym/src/ui.cpp" "CMakeFiles/solar_sym.dir/src/ui.cpp.o" "gcc" "CMakeFiles/solar_sym.dir/src/ui.cpp.o.d"
   "/home/foxima/msu/oop/solar_sym/src/utils.cpp" "CMakeFiles/solar_sym.dir/src/utils.cpp.o" "gcc" "CMakeFiles/solar_sym.dir/src/utils.cpp.o.d"
   )
 
