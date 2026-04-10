@@ -72,6 +72,10 @@ void Camera::clampPitch() {
     if (intentPitch < -maxPitch) intentPitch = -maxPitch;
 }
 
+void Camera::clampDistance() {
+    if (intentDistance < 1e-7) intentDistance = 1e-7;
+}
+
 bool Camera::projectToScreen(const Vector3& worldPos, sf::Vector2f& screenPos, float& scale) {
     Vector3 toPoint = worldPos - position;
     
@@ -108,8 +112,9 @@ void Camera::processInput(float dt, short dYaw, short dPitch, float dDistance, f
     intentPitch += dPitch * rotationSpeed * multiplier * dt;
     
     intentDistance *= (1.0f + dDistance * zoomSpeed * multiplier * dt);
-    
+
     clampPitch();
+    clampDistance();
 }
 
 void Camera::setTarget(Object* target) {
@@ -138,7 +143,6 @@ void Camera::update(float dt) {
     yaw = lerp(intentYaw, yaw, smoothness);
     pitch = lerp(intentPitch, pitch, smoothness);
     distance = lerp(intentDistance, distance, smoothness);
-    clampPitch();
     position = sphericalToCartesian(target->position, M_PI + yaw, -pitch, distance);
 }
 

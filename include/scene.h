@@ -16,9 +16,9 @@ private:
     sf::Font font;
     std::vector<Object> objects;
     std::unique_ptr<Camera> camera;
-    std::vector<Button> buttons;
-    TextBox speedDisplay;
-    Button* showNamesButton = nullptr;
+    std::vector<std::unique_ptr<UIElement>> uiElements;
+    TextBox* speedDisplay;
+    Button* showNamesButton;
 
     double G;
     double softening;
@@ -30,7 +30,7 @@ private:
 
     float pendingZoom = 0.0f;
 
-    void initButtons();
+    void setupUI();
     void updateSpeedDisplay();
     void updateShowNamesButtonText();
     std::vector<Vector3> computeAccelerations(const std::vector<Object>& objects) const;

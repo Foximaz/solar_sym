@@ -38,6 +38,7 @@ private:
     Vector3 getRight() const;
     Vector3 getUp() const;
     void clampPitch();
+    void clampDistance();
     bool projectToScreen(const Vector3& worldPos, sf::Vector2f& screenPos, float& scale);
 
 public:    

@@ -17,27 +17,31 @@ Scene::Scene(
     , font(load_ui_config((std::filesystem::path(dictPath) / "ui_config.json").string()))
     , objects(load_obj_config((std::filesystem::path(dictPath) / "obj_config.json").string()))
     , camera(std::make_unique<Camera>(load_cam_config(window, objects, (std::filesystem::path(dictPath) / "cam_config.json").string())))
-    , speedDisplay(
-        font,
-        sf::Vector2f(330, 25),
-        sf::Vector2f(90, 70),
-        24,
-        sf::Color(30, 30, 40),
-        sf::Color::White,
-        sf::Color(100, 100, 150),
-        2.0f
-    )
     , G(G)
     , softening(softening)
 {
-    initButtons();
+    setupUI();
+    updateSpeedDisplay();
 }
 
-void Scene::initButtons() {
-    buttons.clear();
-    buttons.reserve(6);
+void Scene::setupUI() {
+    uiElements.clear();
     
-    buttons.emplace_back(
+    auto speedDisplayPtr = std::make_unique<TextBox>(
+        font,
+        sf::Vector2f(330, 25),
+        sf::Vector2f(90, 70),
+        "",
+        24,
+        sf::Color::White,
+        sf::Color(50, 50, 50),
+        sf::Color(100, 100, 150),
+        2.0f
+    );
+    speedDisplay = speedDisplayPtr.get();
+    uiElements.push_back(std::move(speedDisplayPtr));
+    
+    auto slowerBtn = std::make_unique<Button>(
         font, "<",
         sf::Vector2f(30, 25),
         sf::Vector2f(70, 70),
@@ -47,8 +51,9 @@ void Scene::initButtons() {
             updateSpeedDisplay();
         }
     );
+    uiElements.push_back(std::move(slowerBtn));
     
-    buttons.emplace_back(
+    auto pauseBtn = std::make_unique<Button>(
         font, "II",
         sf::Vector2f(130, 25),
         sf::Vector2f(70, 70),
@@ -58,8 +63,9 @@ void Scene::initButtons() {
             updateSpeedDisplay();
         }
     );
+    uiElements.push_back(std::move(pauseBtn));
     
-    buttons.emplace_back(
+    auto fasterBtn = std::make_unique<Button>(
         font, ">",
         sf::Vector2f(230, 25),
         sf::Vector2f(70, 70),
@@ -69,8 +75,9 @@ void Scene::initButtons() {
             updateSpeedDisplay();
         }
     );
+    uiElements.push_back(std::move(fasterBtn));
     
-    buttons.emplace_back(
+    auto namesBtn = std::make_unique<Button>(
         font,
         " Hide\nnames",
         sf::Vector2f(window.getSize().x / 2, 25),
@@ -81,18 +88,20 @@ void Scene::initButtons() {
             updateShowNamesButtonText();
         }
     );
-    showNamesButton = &buttons.back();
+    showNamesButton = namesBtn.get();
+    uiElements.push_back(std::move(namesBtn));
     updateShowNamesButtonText();
-
-    buttons.emplace_back(
+    
+    auto reloadBtn = std::make_unique<Button>(
         font, "Reload",
         sf::Vector2f(window.getSize().x - 230, 25),
         sf::Vector2f(100, 70),
         25,
         [this]() { reload(); }
     );
+    uiElements.push_back(std::move(reloadBtn));
     
-    buttons.emplace_back(
+    auto closeBtn = std::make_unique<Button>(
         font, "x",
         sf::Vector2f(window.getSize().x - 100, 25),
         sf::Vector2f(70, 70),
@@ -100,6 +109,75 @@ void Scene::initButtons() {
         [this]() { window.close(); },
         sf::Color(200, 60, 60)
     );
+    uiElements.push_back(std::move(closeBtn));
+
+
+    auto helpPanel = std::make_unique<CollapsiblePanel>(
+        font,
+        sf::Vector2f(window.getSize().x - 20, window.getSize().y - 20),
+        sf::Vector2f(250, 230),
+        "?", "x",
+        PanelDirection::LeftUp,
+        sf::Color(40, 40, 50),
+        sf::Color(150, 150, 200),
+        2.0f
+    );
+
+    auto line1 = std::make_unique<TextBox>(
+        font,
+        sf::Vector2f(window.getSize().x - 235, window.getSize().y - 150),
+        sf::Vector2f(180, 25),
+        "Mouse wheel - zoom",
+        17,
+        sf::Color(220, 220, 220),
+        sf::Color::Transparent,
+        sf::Color::Transparent,
+        0.0f
+    );
+    helpPanel->addElement(std::move(line1));
+    
+    auto line2 = std::make_unique<TextBox>(
+        font,
+        sf::Vector2f(window.getSize().x - 235, window.getSize().y - 125),
+        sf::Vector2f(180, 25),
+        "Arrows - rotate",
+        17,
+        sf::Color(220, 220, 220),
+        sf::Color::Transparent,
+        sf::Color::Transparent,
+        0.0f
+    );
+    helpPanel->addElement(std::move(line2));
+    
+    auto line3 = std::make_unique<TextBox>(
+        font,
+        sf::Vector2f(window.getSize().x - 235, window.getSize().y - 100),
+        sf::Vector2f(180, 25),
+        "Shift + ___ - fine movement",
+        17,
+        sf::Color(220, 220, 220),
+        sf::Color::Transparent,
+        sf::Color::Transparent,
+        0.0f
+    );
+    helpPanel->addElement(std::move(line3));
+
+    auto line4 = std::make_unique<TextBox>(
+        font,
+        sf::Vector2f(window.getSize().x - 235, window.getSize().y - 75),
+        sf::Vector2f(180, 25),
+        "Click - select object",
+        17,
+        sf::Color(220, 220, 220),
+        sf::Color::Transparent,
+        sf::Color::Transparent,
+        0.0f
+    );
+    helpPanel->addElement(std::move(line4));
+
+    
+    helpPanel->setCollapsed(true);
+    uiElements.push_back(std::move(helpPanel));
 }
 
 void Scene::updateShowNamesButtonText() {
@@ -107,7 +185,7 @@ void Scene::updateShowNamesButtonText() {
         if (camera->getShowNames()) {
             showNamesButton->setText("  Hide\nnames");
         } else {
-            showNamesButton->setText("  Show\nnames");
+            showNamesButton->setText(" Show\nnames");
         }
     }
 }
@@ -137,31 +215,31 @@ void Scene::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
         }
     }
     
-    if (event.type == sf::Event::KeyPressed) {
-        switch (event.key.code) {
-            case sf::Keyboard::Num1:
-                simulationSpeed = 1.0;
-                updateSpeedDisplay();
-                break;
-            case sf::Keyboard::Num2:
-                simulationSpeed = std::min(128.0, simulationSpeed * 2);
-                updateSpeedDisplay();
-                break;
-            case sf::Keyboard::Num3:
-                simulationSpeed = simulationSpeed * 0.5;
-                updateSpeedDisplay();
-                break;
-            case sf::Keyboard::Space:
-                pause = !pause;
-                updateSpeedDisplay();
-                break;
-            default:
-                break;
-        }
-    }
+    // if (event.type == sf::Event::KeyPressed) {
+    //     switch (event.key.code) {
+    //         case sf::Keyboard::Num1:
+    //             simulationSpeed = 1.0;
+    //             updateSpeedDisplay();
+    //             break;
+    //         case sf::Keyboard::Num2:
+    //             simulationSpeed = std::min(128.0, simulationSpeed * 2);
+    //             updateSpeedDisplay();
+    //             break;
+    //         case sf::Keyboard::Num3:
+    //             simulationSpeed = simulationSpeed * 0.5;
+    //             updateSpeedDisplay();
+    //             break;
+    //         case sf::Keyboard::Space:
+    //             pause = !pause;
+    //             updateSpeedDisplay();
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
     
-    for (auto& button : buttons) {
-        button.handleEvent(event, window);
+    for (auto& uiElement : uiElements) {
+        uiElement->handleEvent(event, window);
     }
 }
 
@@ -222,7 +300,7 @@ void Scene::updateSpeedDisplay() {
             speedText = buffer;
         }
     }
-    speedDisplay.setText(speedText);
+    speedDisplay->setText(speedText);
 }
 
 void Scene::update(float dt) {
@@ -255,17 +333,16 @@ void Scene::update(float dt) {
     }
 
     camera->update(dt);
-    for (auto& button : buttons) {
-        button.update();
+    for (auto& uiElement : uiElements) {
+        uiElement->update(dt);
     }
 }
 
 void Scene::render() {
     window.clear(sf::Color::Black);
     camera->render(objects);
-    for (auto& button : buttons) {
-        button.render(window);
+    for (auto& uiElement : uiElements) {
+        uiElement->draw(window);
     }
-    speedDisplay.draw(window);
     window.display();
 }

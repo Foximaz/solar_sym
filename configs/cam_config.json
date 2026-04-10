@@ -4,11 +4,11 @@
     "distance": 15.0,
     "fov": 60.0,
     "rotationSpeed": 3,
-    "zoomSpeed": 15,
+    "zoomSpeed": 10,
     "smoothness": 0.85,
     "showNames": true,
     "fontPath": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-    "characterSize": 16,
-    "minShow": 4,
+    "characterSize": 17,
+    "minShow": 3.5,
     "iconSize": 6
 }
