@@ -19,6 +19,7 @@ Scene::Scene(
     , camera(std::make_unique<Camera>(load_cam_config(window, objects, (std::filesystem::path(dictPath) / "cam_config.json").string())))
     , G(G)
     , softening(softening)
+    , selectedObject(&objects[0])
 {
     setupUI();
     updateSpeedDisplay();
@@ -61,6 +62,7 @@ void Scene::setupUI() {
         [this]() {
             pause = !pause;
             updateSpeedDisplay();
+            setInputFieldsEnabled(pause);
         }
     );
     uiElements.push_back(std::move(pauseBtn));
@@ -111,7 +113,11 @@ void Scene::setupUI() {
     );
     uiElements.push_back(std::move(closeBtn));
 
+    setupHelpPanel();
+    setupEditPanel();    
+}
 
+void Scene::setupHelpPanel() {
     auto helpPanel = std::make_unique<CollapsiblePanel>(
         font,
         sf::Vector2f(window.getSize().x - 20, window.getSize().y - 20),
@@ -175,9 +181,327 @@ void Scene::setupUI() {
     );
     helpPanel->addElement(std::move(line4));
 
-    
     helpPanel->setCollapsed(true);
     uiElements.push_back(std::move(helpPanel));
+}
+
+void Scene::setupEditPanel() {
+    auto panel = std::make_unique<CollapsiblePanel>(
+        font,
+        sf::Vector2f(20, window.getSize().y - 20),
+        sf::Vector2f(300, 340),
+        "Exp", "V",
+        PanelDirection::RightUp,
+        sf::Color(50, 50, 70),
+        sf::Color(200, 200, 250),
+        2.0f
+    );
+
+    float baseX = 30;
+    float baseY = window.getSize().y - 260;
+    float labelX = baseX;
+    float fieldX = baseX + 70;
+    float fieldW = 200;
+    float fieldH = 25;
+    float rowHeight = 30;
+    
+    float currentY = baseY;
+    
+    // Name
+    auto nameLabel = std::make_unique<TextBox>(
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
+        "Name", 14, sf::Color::White, sf::Color::Transparent,
+        sf::Color::Transparent, 0
+    );
+    panel->addElement(std::move(nameLabel));
+    
+    auto nameInput = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH),
+        16, false, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    nameField = nameInput.get();
+    panel->addElement(std::move(nameInput));
+    currentY += rowHeight;
+    
+    // Position
+    auto posLabel = std::make_unique<TextBox>(
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
+        "Position", 16, sf::Color::White, sf::Color::Transparent,
+        sf::Color::Transparent, 0
+    );
+    panel->addElement(std::move(posLabel));
+    
+    auto posXin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    posX = posXin.get();
+    panel->addElement(std::move(posXin));
+    
+    auto posYin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    posY = posYin.get();
+    panel->addElement(std::move(posYin));
+    
+    auto posZin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    posZ = posZin.get();
+    panel->addElement(std::move(posZin));
+    currentY += rowHeight;
+    
+    // Velocity
+    auto velLabel = std::make_unique<TextBox>(
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
+        "Velocity", 16, sf::Color::White, sf::Color::Transparent,
+        sf::Color::Transparent, 0
+    );
+    panel->addElement(std::move(velLabel));
+    
+    auto velXin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    velX = velXin.get();
+    panel->addElement(std::move(velXin));
+    
+    auto velYin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    velY = velYin.get();
+    panel->addElement(std::move(velYin));
+    
+    auto velZin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    velZ = velZin.get();
+    panel->addElement(std::move(velZin));
+    currentY += rowHeight;
+    
+    // Mass
+    auto massLabel = std::make_unique<TextBox>(
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
+        "Mass", 16, sf::Color::White, sf::Color::Transparent,
+        sf::Color::Transparent, 0
+    );
+    panel->addElement(std::move(massLabel));
+    
+    auto massInput = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    massField = massInput.get();
+    panel->addElement(std::move(massInput));
+    currentY += rowHeight;
+    
+    // Size
+    auto sizeLabel = std::make_unique<TextBox>(
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
+        "Size", 16, sf::Color::White, sf::Color::Transparent,
+        sf::Color::Transparent, 0
+    );
+    panel->addElement(std::move(sizeLabel));
+    
+    auto sizeInput = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    sizeField = sizeInput.get();
+    panel->addElement(std::move(sizeInput));
+    currentY += rowHeight;
+    
+    // Color
+    auto colorLabel = std::make_unique<TextBox>(
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
+        "Color", 16, sf::Color::White, sf::Color::Transparent,
+        sf::Color::Transparent, 0
+    );
+    panel->addElement(std::move(colorLabel));
+    
+    auto colorRin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    colorR = colorRin.get();
+    panel->addElement(std::move(colorRin));
+    
+    auto colorGin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    colorG = colorGin.get();
+    panel->addElement(std::move(colorGin));
+    
+    auto colorBin = std::make_unique<InputField>(
+        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH),
+        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+    );
+    colorB = colorBin.get();
+    panel->addElement(std::move(colorBin));
+    currentY += rowHeight + 10;
+    
+    auto createBtn = std::make_unique<Button>(
+        font, "Create", sf::Vector2f(labelX, currentY), sf::Vector2f(90, 35), 18,
+        [this]() { createObjectFromFields(); }
+    );
+    panel->addElement(std::move(createBtn));
+    
+    auto editBtn = std::make_unique<Button>(
+        font, "Edit", sf::Vector2f(labelX + 100, currentY), sf::Vector2f(70, 35), 18,
+        [this]() { applyEditToObject(); }
+    );
+    panel->addElement(std::move(editBtn));
+    
+    auto removeBtn = std::make_unique<Button>(
+        font, "Remove", sf::Vector2f(labelX + 180, currentY), sf::Vector2f(90, 35), 18,
+        [this]() { removeSelectedObject(); }
+    );
+    panel->addElement(std::move(removeBtn));
+    
+    uiElements.push_back(std::move(panel));
+    
+    setInputFieldsEnabled(false);
+}
+
+void Scene::updateEditPanelFromObject() {
+    if (!selectedObject) {
+        nameField->setText("");
+        posX->setText(""); posY->setText(""); posZ->setText("");
+        velX->setText(""); velY->setText(""); velZ->setText("");
+        massField->setText("");
+        sizeField->setText("");
+        colorR->setText(""); colorG->setText(""); colorB->setText("");
+        return;
+    }
+    nameField->setText(selectedObject->name);
+    posX->setText(std::to_string(selectedObject->position.x));
+    posY->setText(std::to_string(selectedObject->position.y));
+    posZ->setText(std::to_string(selectedObject->position.z));
+    velX->setText(std::to_string(selectedObject->velocity.x));
+    velY->setText(std::to_string(selectedObject->velocity.y));
+    velZ->setText(std::to_string(selectedObject->velocity.z));
+    massField->setText(std::to_string(selectedObject->mass));
+    sizeField->setText(std::to_string(selectedObject->size));
+    colorR->setText(std::to_string(selectedObject->color.r));
+    colorG->setText(std::to_string(selectedObject->color.g));
+    colorB->setText(std::to_string(selectedObject->color.b));
+}
+
+void Scene::applyEditToObject() {
+    if (!selectedObject || !pause) return;
+    try {
+        selectedObject->name = nameField->getText();
+        selectedObject->position.x = std::stod(posX->getText());
+        selectedObject->position.y = std::stod(posY->getText());
+        selectedObject->position.z = std::stod(posZ->getText());
+        selectedObject->velocity.x = std::stod(velX->getText());
+        selectedObject->velocity.y = std::stod(velY->getText());
+        selectedObject->velocity.z = std::stod(velZ->getText());
+        selectedObject->mass = std::stod(massField->getText());
+        selectedObject->size = std::stod(sizeField->getText());
+        selectedObject->color.r = std::stoi(colorR->getText());
+        selectedObject->color.g = std::stoi(colorG->getText());
+        selectedObject->color.b = std::stoi(colorB->getText());
+    } catch (...) {}
+}
+
+void Scene::createObjectFromFields() {
+    if (!pause) return;
+    
+    // Парсим значения из полей
+    std::string name = nameField->getText();
+    if (name.empty()) name = "New";
+    
+    Vector3 position;
+    Vector3 velocity;
+    double mass = 1.0;
+    double size = 0.1;
+    sf::Color color = sf::Color::White;
+    
+    try {
+        position = Vector3(
+            std::stod(posX->getText()),
+            std::stod(posY->getText()),
+            std::stod(posZ->getText())
+        );
+    } catch (...) {
+        position = Vector3(0, 0, 0);
+    }
+    
+    try {
+        velocity = Vector3(
+            std::stod(velX->getText()),
+            std::stod(velY->getText()),
+            std::stod(velZ->getText())
+        );
+    } catch (...) {
+        velocity = Vector3(0, 0, 0);
+    }
+    
+    try {
+        mass = std::stod(massField->getText());
+    } catch (...) {
+        mass = 1.0;
+    }
+    
+    try {
+        size = std::stod(sizeField->getText());
+    } catch (...) {
+        size = 0.1;
+    }
+    
+    try {
+        color = sf::Color(
+            std::stoi(colorR->getText()),
+            std::stoi(colorG->getText()),
+            std::stoi(colorB->getText())
+        );
+    } catch (...) {
+        color = sf::Color::White;
+    }
+    
+    Object newObj(position, velocity, mass, size, color, name);
+    objects.push_back(newObj);
+    
+    selectedObject = &objects.back();
+    camera->setTarget(selectedObject);
+    updateEditPanelFromObject();
+}
+
+void Scene::removeSelectedObject() {
+    if (!selectedObject || !pause) return;
+    auto it = std::find_if(objects.begin(), objects.end(),
+        [this](const Object& obj) { return &obj == selectedObject; });
+    if (it != objects.end()) {
+        objects.erase(it);
+        if (objects.empty()) {
+            selectedObject = nullptr;
+        } else {
+            selectedObject = &objects[0];
+            camera->setTarget(selectedObject);
+        }
+        updateEditPanelFromObject();
+    }
+}
+
+void Scene::setInputFieldsEnabled(bool enabled) {
+    if (nameField) nameField->setEnabled(enabled);
+    if (posX) posX->setEnabled(enabled);
+    if (posY) posY->setEnabled(enabled);
+    if (posZ) posZ->setEnabled(enabled);
+    if (velX) velX->setEnabled(enabled);
+    if (velY) velY->setEnabled(enabled);
+    if (velZ) velZ->setEnabled(enabled);
+    if (massField) massField->setEnabled(enabled);
+    if (sizeField) sizeField->setEnabled(enabled);
+    if (colorR) colorR->setEnabled(enabled);
+    if (colorG) colorG->setEnabled(enabled);
+    if (colorB) colorB->setEnabled(enabled);
 }
 
 void Scene::updateShowNamesButtonText() {
@@ -212,31 +536,10 @@ void Scene::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
         Object* clicked = nullptr;
         if (camera->handleMouseClick(mousePos, clicked)) {
             camera->setTarget(clicked);
+            selectedObject = clicked;
+            updateEditPanelFromObject();
         }
     }
-    
-    // if (event.type == sf::Event::KeyPressed) {
-    //     switch (event.key.code) {
-    //         case sf::Keyboard::Num1:
-    //             simulationSpeed = 1.0;
-    //             updateSpeedDisplay();
-    //             break;
-    //         case sf::Keyboard::Num2:
-    //             simulationSpeed = std::min(128.0, simulationSpeed * 2);
-    //             updateSpeedDisplay();
-    //             break;
-    //         case sf::Keyboard::Num3:
-    //             simulationSpeed = simulationSpeed * 0.5;
-    //             updateSpeedDisplay();
-    //             break;
-    //         case sf::Keyboard::Space:
-    //             pause = !pause;
-    //             updateSpeedDisplay();
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // }
     
     for (auto& uiElement : uiElements) {
         uiElement->handleEvent(event, window);
@@ -336,9 +639,13 @@ void Scene::update(float dt) {
     for (auto& uiElement : uiElements) {
         uiElement->update(dt);
     }
+
+    if (!pause && selectedObject) {
+        updateEditPanelFromObject();
+    }
 }
 
-void Scene::render() {
+void Scene::draw() {
     window.clear(sf::Color::Black);
     camera->render(objects);
     for (auto& uiElement : uiElements) {

@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) {
     sf::RenderWindow window(sf::VideoMode(1500, 900), "Solar simulation");
-    window.setFramerateLimit(120);
+    window.setFramerateLimit(60);
     
     std::string dictPath = "./configs/";
     
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
         while (window.pollEvent(event)) { scene.handleEvent(event, window); }
         scene.processInput(dt);
         scene.update(dt);
-        scene.render();
+        scene.draw();
     }
     return 0;
 }

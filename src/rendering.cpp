@@ -163,7 +163,7 @@ void Camera::render(std::vector<Object>& objects) {
         sf::Vector2f screenPos;
         float scale;
         if (projectToScreen(object->position, screenPos, scale)) {
-            bool show = sqrt(object->mass) * scale > minShow;
+            bool show = (object == target) || sqrt(object->mass) * scale > minShow;
             if (show) {
                 bool useIcon = object->size * scale < iconSize + 1.5;
                 

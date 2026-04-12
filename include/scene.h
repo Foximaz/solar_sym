@@ -16,9 +16,17 @@ private:
     sf::Font font;
     std::vector<Object> objects;
     std::unique_ptr<Camera> camera;
+    Object* selectedObject;
+
     std::vector<std::unique_ptr<UIElement>> uiElements;
     TextBox* speedDisplay;
     Button* showNamesButton;
+    InputField* nameField;
+    InputField* posX, *posY, *posZ;
+    InputField* velX, *velY, *velZ;
+    InputField* massField;
+    InputField* sizeField;
+    InputField* colorR, *colorG, *colorB;
 
     double G;
     double softening;
@@ -30,6 +38,13 @@ private:
 
     float pendingZoom = 0.0f;
 
+    void setupHelpPanel();
+    void setupEditPanel();
+    void updateEditPanelFromObject();
+    void applyEditToObject();
+    void createObjectFromFields();
+    void removeSelectedObject();
+    void setInputFieldsEnabled(bool enabled);
     void setupUI();
     void updateSpeedDisplay();
     void updateShowNamesButtonText();
@@ -47,7 +62,7 @@ public:
     void handleEvent(const sf::Event& event, sf::RenderWindow& window);
     void processInput(float dt);
     void update(float dt);
-    void render();
+    void draw();
 };
 
 #endif

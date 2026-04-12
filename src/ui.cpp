@@ -363,6 +363,7 @@ sf::Vector2f InputField::getPosition() const {
 void InputField::setText(const std::string& s) {
     text.setString(s);
     clampText();
+    updateTextPosition();
 }
 
 std::string InputField::getText() const {
@@ -387,10 +388,16 @@ void InputField::setEnabled(bool enabled) {
 
 void InputField::updateTextPosition() {
     sf::Vector2f bgPos = background.getPosition();
-    sf::Vector2f textPos = bgPos + sf::Vector2f(5, background.getSize().y / 2.0f - text.getGlobalBounds().height / 2.0f);
-    textPos.x = std::round(textPos.x);
-    textPos.y = std::round(textPos.y);
-    text.setPosition(textPos);
+    
+    sf::FloatRect textBounds = text.getLocalBounds();
+    
+    float textX = bgPos.x + 5;
+    float textY = bgPos.y + background.getSize().y / 2.0f - textBounds.height;
+    
+    textX = std::round(textX);
+    textY = std::round(textY);
+    
+    text.setPosition(textX, textY);
 }
 
 void InputField::clampText() {
@@ -449,6 +456,16 @@ CollapsiblePanel::CollapsiblePanel(
 
 sf::Vector2f CollapsiblePanel::getButtonOffset() const {
     if (collapsed) {
+        switch (direction) {
+            case PanelDirection::RightDown:
+                return sf::Vector2f(0, 0);
+            case PanelDirection::RightUp:
+                return sf::Vector2f(0, -70);
+            case PanelDirection::LeftDown:
+                return sf::Vector2f(-70, 0);
+            case PanelDirection::LeftUp:
+                return sf::Vector2f(-70, -70);
+        }
         return sf::Vector2f(-70, -70);
     }
     
@@ -481,7 +498,7 @@ sf::Vector2f CollapsiblePanel::getExpandedPosition() const {
 
 sf::Vector2f CollapsiblePanel::getButtonPosition() const {
     if (collapsed) {
-        return sf::Vector2f(anchorPoint.x - 70, anchorPoint.y - 70);
+        return anchorPoint + getButtonOffset();
     } else {
         return getExpandedPosition() + getButtonOffset();
     }
