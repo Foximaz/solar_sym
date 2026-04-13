@@ -356,4 +356,4 @@ CMakeFiles/solar_sym.dir/src/scene.cpp.o: \
  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
  /usr/include/c++/13/bits/fstream.tcc \
- /home/foxima/msu/oop/solar_sym/include/ui.h /usr/include/c++/13/iostream
+ /home/foxima/msu/oop/solar_sym/include/ui.h

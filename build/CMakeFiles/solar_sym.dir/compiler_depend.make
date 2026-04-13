@@ -1679,7 +1679,6 @@ CMakeFiles/solar_sym.dir/src/scene.cpp.o: /home/foxima/msu/oop/solar_sym/src/sce
   /usr/include/c++/13/iomanip \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
-  /usr/include/c++/13/iostream \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/iterator \
   /usr/include/c++/13/limits \

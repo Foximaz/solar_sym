@@ -4,7 +4,7 @@
 #include <string>
 #include <filesystem>
 #include <algorithm>
-#include <iostream> //DEBUG
+#include <cmath>
 
 Scene::Scene(
     sf::RenderWindow& window,
@@ -527,7 +527,10 @@ void Scene::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
     
     if (event.type == sf::Event::MouseWheelScrolled) {
         if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
-            pendingZoom += event.mouseWheelScroll.delta;
+            if (std::abs(event.mouseWheelScroll.delta) < 0.7f)
+                pendingZoom += event.mouseWheelScroll.delta;
+            else
+                pendingZoom += std::copysign(0.7f, event.mouseWheelScroll.delta);
         }
     }
     
