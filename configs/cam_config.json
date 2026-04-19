@@ -9,6 +9,6 @@
     "showNames": true,
     "fontPath": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     "characterSize": 17,
-    "minShow": 3.5,
+    "minShow": 4,
     "iconSize": 6
 }

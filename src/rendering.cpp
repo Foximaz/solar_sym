@@ -164,16 +164,17 @@ void Camera::render(std::vector<Object>& objects) {
         if (projectToScreen(object->position, screenPos, scale)) {
             bool show = (object == target) || sqrt(object->mass) * scale > minShow;
             if (show) {
-                bool useIcon = object->size * scale < iconSize + 1.5;
+                float currentIconSize = iconSize * (1 + log(0.01 + object->mass) / 8);
+                bool useIcon = object->size * scale < currentIconSize + 1.5;
                 
                 float radius;
                 if (useIcon) {
-                    radius = iconSize;
-                    sf::CircleShape icon(iconSize);
+                    radius = currentIconSize;
+                    sf::CircleShape icon(currentIconSize);
                     icon.setFillColor(sf::Color::Transparent);
                     icon.setOutlineColor(object->color);
                     icon.setOutlineThickness(3);
-                    icon.setOrigin(iconSize, iconSize);
+                    icon.setOrigin(currentIconSize, currentIconSize);
                     icon.setPosition(screenPos);
                     window.draw(icon);
                 } else {
@@ -196,7 +197,7 @@ void Camera::render(std::vector<Object>& objects) {
                     sf::FloatRect bounds = nameText.getLocalBounds();
                     nameText.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f);
                     
-                    nameText.setPosition(screenPos.x, screenPos.y - 15.0f - std::max(iconSize, object->size * scale));
+                    nameText.setPosition(screenPos.x, screenPos.y - 15.0f - std::max(currentIconSize, object->size * scale));
                     
                     window.draw(nameText);
                 }

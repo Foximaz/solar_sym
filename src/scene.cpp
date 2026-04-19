@@ -346,13 +346,13 @@ void Scene::setupEditPanel() {
     currentY += rowHeight + 10;
     
     auto createBtn = std::make_unique<Button>(
-        font, "New", sf::Vector2f(labelX, currentY), sf::Vector2f(90, 35), 18,
+        font, "New", sf::Vector2f(labelX, currentY), sf::Vector2f(80, 35), 18,
         [this]() { createObjectFromFields(); }
     );
     panel->addElement(std::move(createBtn));
     
     auto editBtn = std::make_unique<Button>(
-        font, "Save", sf::Vector2f(labelX + 100, currentY), sf::Vector2f(70, 35), 18,
+        font, "Save", sf::Vector2f(labelX + 90, currentY), sf::Vector2f(80, 35), 18,
         [this]() { applyEditToObject(); }
     );
     panel->addElement(std::move(editBtn));
@@ -566,6 +566,9 @@ void Scene::processInput(float dt) {
 }
 
 std::vector<Vector3> Scene::computeAccelerations(const std::vector<Object>& objects) const {
+    // Newton's law of universal gravitation: F = G * M * m / r^2
+    // Acceleration of object i: a_i = F / m_i = G * sum_{j!=i} (m_j / r_ij^3) * r_ji
+    // To avoid division by zero when objects get too close, we add a softening parameter
     std::vector<Vector3> acc(objects.size(), Vector3(0, 0, 0));
     
     for (size_t i = 0; i < objects.size(); ++i) {
@@ -610,6 +613,9 @@ void Scene::updateSpeedDisplay() {
 }
 
 void Scene::update(float dt) {
+    // Velocity Verlet integration scheme (second order accurate, symplectic)
+    // Good energy conservation for gravitational systems
+    // Two acceleration calculations per time step
     if (!pause) {
         double step;
         if (simulationSpeed > 1.0) {
@@ -621,19 +627,27 @@ void Scene::update(float dt) {
         }
 
         while (accumulator >= fixedTimestep) {
+            // 1. Compute acceleration at beginning of the step
             std::vector<Vector3> acc0 = computeAccelerations(objects);
+
+            // 2. Half-step velocity update (v_{n+1/2} = v_n + a_n * Δt/2)
             for (size_t i = 0; i < objects.size(); ++i) {
                 objects[i].velocity += acc0[i] * (step / 2.0);
             }
 
+            // 3. Full-step position update (x_{n+1} = x_n + v_{n+1/2} * Δt
             for (size_t i = 0; i < objects.size(); ++i) {
                 objects[i].position += objects[i].velocity * step;
             }
 
+            // 4. Compute acceleration at the new position
             std::vector<Vector3> acc1 = computeAccelerations(objects);
+
+            // 5. Second half-step velocity update (v_{n+1} = v_{n+1/2} + a_{n+1} * Δt/2)
             for (size_t i = 0; i < objects.size(); ++i) {
                 objects[i].velocity += acc1[i] * (step / 2.0);
             }
+
             accumulator -= fixedTimestep;
         }
     }
