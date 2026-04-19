@@ -103,8 +103,7 @@ bool Camera::projectToScreen(const Vector3& worldPos, sf::Vector2f& screenPos, f
     return true;
 }
 
-void Camera::switchShowNames() { showNames = !showNames; }
-
+void Camera::setShowNames(bool show) { showNames = show; }
 bool Camera::getShowNames() const { return showNames; }
 
 void Camera::processInput(float dt, short dYaw, short dPitch, float dDistance, float multiplier) {

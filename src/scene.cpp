@@ -86,7 +86,7 @@ void Scene::setupUI() {
         sf::Vector2f(100, 70),
         20,
         [this]() {
-            camera->switchShowNames();
+            camera->setShowNames(!camera->getShowNames());
             updateShowNamesButtonText();
         }
     );
@@ -346,13 +346,13 @@ void Scene::setupEditPanel() {
     currentY += rowHeight + 10;
     
     auto createBtn = std::make_unique<Button>(
-        font, "Create", sf::Vector2f(labelX, currentY), sf::Vector2f(90, 35), 18,
+        font, "New", sf::Vector2f(labelX, currentY), sf::Vector2f(90, 35), 18,
         [this]() { createObjectFromFields(); }
     );
     panel->addElement(std::move(createBtn));
     
     auto editBtn = std::make_unique<Button>(
-        font, "Edit", sf::Vector2f(labelX + 100, currentY), sf::Vector2f(70, 35), 18,
+        font, "Save", sf::Vector2f(labelX + 100, currentY), sf::Vector2f(70, 35), 18,
         [this]() { applyEditToObject(); }
     );
     panel->addElement(std::move(editBtn));
@@ -413,7 +413,6 @@ void Scene::applyEditToObject() {
 void Scene::createObjectFromFields() {
     if (!pause) return;
     
-    // Парсим значения из полей
     std::string name = nameField->getText();
     if (name.empty()) name = "New";
     
@@ -516,6 +515,7 @@ void Scene::updateShowNamesButtonText() {
 
 void Scene::reload() {
     objects = load_obj_config((std::filesystem::path(dictPath) / "obj_config.json").string());
+    selectedObject = &objects[0];
     camera = std::make_unique<Camera>(load_cam_config(window, objects, (std::filesystem::path(dictPath) / "cam_config.json").string()));
     updateSpeedDisplay();
 }

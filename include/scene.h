@@ -49,6 +49,7 @@ private:
     void updateSpeedDisplay();
     void updateShowNamesButtonText();
     std::vector<Vector3> computeAccelerations(const std::vector<Object>& objects) const;
+    void reload();
 
 public:
     Scene(
@@ -58,7 +59,6 @@ public:
         double softening
     );
 
-    void reload();
     void handleEvent(const sf::Event& event, sf::RenderWindow& window);
     void processInput(float dt);
     void update(float dt);

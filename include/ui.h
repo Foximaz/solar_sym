@@ -63,7 +63,6 @@ public:
     void setPosition(const sf::Vector2f& position) override;
     sf::Vector2f getPosition() const override;
     void setText(const std::string& newText);
-    void setNormalColor(const sf::Color& color);
 };
 
 
@@ -103,14 +102,6 @@ public:
     sf::Vector2f getPosition() const override;
 
     void setText(const std::string& newText);
-    std::string getText() const;
-    
-    void setTextColor(const sf::Color& color);
-    void setBackgroundColor(const sf::Color& color);
-    void setOutline(const sf::Color& color, float thickness);
-    
-    void setDrawBackground(bool draw);
-    void setDrawOutline(bool draw);
 };
 
 
@@ -155,10 +146,8 @@ public:
     void setText(const std::string& s);
     std::string getText() const;
 
-    void setNumericOnly(bool numeric);
     void setEnabled(bool enabled);
     bool isEnabled() const;
-    bool isFocused() const;
 };
 
 
@@ -216,17 +205,10 @@ public:
     sf::Vector2f getPosition() const override { return anchorPoint; }
 
     void addElement(std::unique_ptr<UIElement> element);
-    void clearElements();
 
     void setCollapsed(bool collapsed);
     bool isCollapsed() const { return collapsed; }
     void toggleCollapse();
-
-    void setDirection(PanelDirection direction);
-    PanelDirection getDirection() const { return direction; }
-    
-    void setSize(const sf::Vector2f& newSize);
-    sf::Vector2f getSize() const { return expandedSize; }
 };
 
 #endif

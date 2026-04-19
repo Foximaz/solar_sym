@@ -59,9 +59,11 @@ public:
         float iconSize
     );
 
-    void switchShowNames();
+    void setShowNames(bool show);
     bool getShowNames() const;
+
     void setTarget(Object* target);
+    
     void processInput(float dt, short dYaw, short dPitch, float dDistance, float multiplier);
     bool handleMouseClick(sf::Vector2i mousePos, Object*& clickedObject) const;
     void update(float dt);

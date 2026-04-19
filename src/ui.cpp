@@ -73,16 +73,6 @@ Button::Button(
     text.setPosition(position + size/2.0f);
 }
 
-void Button::setNormalColor(const sf::Color& color) {
-    normalColor = color;
-    hoverColor = shiftSaturation(color, 0.2f);
-    pressedColor = shiftBrightness(color, 0.7f);
-
-    if (!isPressed && !isHovered) {
-        shape.setFillColor(normalColor);
-    }
-}
-
 void Button::setText(const std::string& newText) {
     text.setString(newText);
     
@@ -231,39 +221,6 @@ void TextBox::setText(const std::string& newText) {
     text.setPosition(textPos);
 }
 
-std::string TextBox::getText() const {
-    return text.getString();
-}
-
-void TextBox::setTextColor(const sf::Color& color) {
-    textColor = color;
-    text.setFillColor(color);
-}
-
-void TextBox::setBackgroundColor(const sf::Color& color) {
-    bgColor = color;
-    drawBackground = (color != sf::Color::Transparent);
-    background.setFillColor(color);
-}
-
-void TextBox::setOutline(const sf::Color& color, float thickness) {
-    outlineColor = color;
-    outlineThickness = thickness;
-    drawOutline = (thickness > 0.0f);
-    background.setOutlineColor(color);
-    background.setOutlineThickness(thickness);
-}
-
-void TextBox::setDrawBackground(bool draw) {
-    drawBackground = draw;
-    background.setFillColor(draw ? bgColor : sf::Color::Transparent);
-}
-
-void TextBox::setDrawOutline(bool draw) {
-    drawOutline = draw;
-    background.setOutlineThickness(draw ? outlineThickness : 0.0f);
-}
-
 
 InputField::InputField(
     sf::Font& font,
@@ -370,10 +327,6 @@ std::string InputField::getText() const {
     return text.getString();
 }
 
-void InputField::setNumericOnly(bool numeric) {
-    numericOnly = numeric;
-}
-
 void InputField::setEnabled(bool enabled) {
     enabled = enabled;
     if (!enabled) hasFocus = false;
@@ -412,7 +365,6 @@ void InputField::clampText() {
 }
 
 bool InputField::isEnabled() const { return enabled; }
-bool InputField::isFocused() const { return hasFocus; }
 
 
 CollapsiblePanel::CollapsiblePanel(
@@ -560,10 +512,6 @@ void CollapsiblePanel::addElement(std::unique_ptr<UIElement> element) {
     elements.push_back(std::move(element));
 }
 
-void CollapsiblePanel::clearElements() {
-    elements.clear();
-}
-
 void CollapsiblePanel::setCollapsed(bool newState) {
     collapsed = newState;
     toggleButton.setText(collapsed ? collapsedText : expandedText);
@@ -578,25 +526,4 @@ void CollapsiblePanel::setCollapsed(bool newState) {
 
 void CollapsiblePanel::toggleCollapse() {
     setCollapsed(!collapsed);
-}
-
-void CollapsiblePanel::setDirection(PanelDirection newDirection) {
-    direction = newDirection;
-    
-    if (!collapsed) {
-        background.setPosition(getExpandedPosition());
-    }
-    
-    updateButtonPosition();
-}
-
-void CollapsiblePanel::setSize(const sf::Vector2f& newSize) {
-    expandedSize = newSize;
-    background.setSize(expandedSize);
-    
-    if (!collapsed) {
-        background.setPosition(getExpandedPosition());
-    }
-    
-    updateButtonPosition();
 }
