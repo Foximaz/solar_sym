@@ -527,10 +527,10 @@ void Scene::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
     
     if (event.type == sf::Event::MouseWheelScrolled) {
         if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
-            if (std::abs(event.mouseWheelScroll.delta) < 0.7f)
+            if (std::abs(event.mouseWheelScroll.delta) < MAX_ZOOM_SPEED)
                 pendingZoom += event.mouseWheelScroll.delta;
             else
-                pendingZoom += std::copysign(0.7f, event.mouseWheelScroll.delta);
+                pendingZoom += std::copysign(MAX_ZOOM_SPEED, event.mouseWheelScroll.delta);
         }
     }
     
@@ -559,7 +559,7 @@ void Scene::processInput(float dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) dPitch -= 1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) dPitch += 1;
     
-    double multiplier = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ? 0.1 : 1.0;
+    double multiplier = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ? ACCURACY_MULTIPLIER : 1.0;
     
     camera->processInput(dt, dYaw, dPitch, pendingZoom, multiplier);
     pendingZoom = 0.0f;

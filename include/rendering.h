@@ -14,6 +14,11 @@ struct RenderInfo {
 
 class Camera {
 private:
+    float MAX_PITCH_DEGREES = 89.0f;
+    float MIN_DISTANCE = 1e-7;
+    float FOCAL_LENGTH = 200.0f;
+    float ICON_OUTLINE_THICKNESS = 3.0f;
+
     Vector3 position;
     Object* target;
     float yaw;

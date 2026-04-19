@@ -11,6 +11,9 @@
 
 class Scene {
 private:
+    float MAX_ZOOM_SPEED = 0.7f;
+    float ACCURACY_MULTIPLIER = 0.1f;
+
     const std::string& dictPath;
     sf::RenderWindow& window;
     sf::Font font;

@@ -67,13 +67,13 @@ Vector3 Camera::getUp() const {
 }
 
 void Camera::clampPitch() {
-    const float maxPitch = 89.0f * M_PI / 180.0f;
+    const float maxPitch = MAX_PITCH_DEGREES * M_PI / 180.0f;
     if (intentPitch > maxPitch) intentPitch = maxPitch;
     if (intentPitch < -maxPitch) intentPitch = -maxPitch;
 }
 
 void Camera::clampDistance() {
-    if (intentDistance < 1e-7) intentDistance = 1e-7;
+    if (intentDistance < MIN_DISTANCE) intentDistance = MIN_DISTANCE;
 }
 
 bool Camera::projectToScreen(const Vector3& worldPos, sf::Vector2f& screenPos, float& scale) {
@@ -99,7 +99,7 @@ bool Camera::projectToScreen(const Vector3& worldPos, sf::Vector2f& screenPos, f
     screenPos.x = (x_ndc + 1.0f) * 0.5f * window.getSize().x;
     screenPos.y = (1.0f - y_ndc) * 0.5f * window.getSize().y;
     
-    scale = 200.0f / z;
+    scale = FOCAL_LENGTH / z;
     return true;
 }
 
@@ -165,7 +165,7 @@ void Camera::render(std::vector<Object>& objects) {
             bool show = (object == target) || sqrt(object->mass) * scale > minShow;
             if (show) {
                 float currentIconSize = iconSize * (1 + log(0.01 + object->mass) / 8);
-                bool useIcon = object->size * scale < currentIconSize + 1.5;
+                bool useIcon = object->size * scale < currentIconSize + ICON_OUTLINE_THICKNESS / 2;
                 
                 float radius;
                 if (useIcon) {
@@ -173,7 +173,7 @@ void Camera::render(std::vector<Object>& objects) {
                     sf::CircleShape icon(currentIconSize);
                     icon.setFillColor(sf::Color::Transparent);
                     icon.setOutlineColor(object->color);
-                    icon.setOutlineThickness(3);
+                    icon.setOutlineThickness(ICON_OUTLINE_THICKNESS);
                     icon.setOrigin(currentIconSize, currentIconSize);
                     icon.setPosition(screenPos);
                     window.draw(icon);
