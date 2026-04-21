@@ -123,61 +123,62 @@ void Scene::setupHelpPanel() {
         sf::Vector2f(window.getSize().x - 20, window.getSize().y - 20),
         sf::Vector2f(250, 230),
         "?", "x",
-        PanelDirection::LeftUp,
-        sf::Color(40, 40, 50),
-        sf::Color(150, 150, 200),
-        2.0f
+        PanelDirection::LeftUp
     );
 
     auto line1 = std::make_unique<TextBox>(
         font,
-        sf::Vector2f(window.getSize().x - 235, window.getSize().y - 150),
-        sf::Vector2f(180, 25),
+        sf::Vector2f(
+            window.getSize().x + HELP_PANEL_POS_SHIFT.x,
+            window.getSize().y + HELP_PANEL_POS_SHIFT.y),
+        HELP_PANEL_LINE_SIZE,
         "Mouse wheel - zoom",
         17,
-        sf::Color(220, 220, 220),
+        HELP_PANEL_FONT_COLOR,
         sf::Color::Transparent,
-        sf::Color::Transparent,
-        0.0f
+        sf::Color::Transparent
     );
     helpPanel->addElement(std::move(line1));
     
     auto line2 = std::make_unique<TextBox>(
         font,
-        sf::Vector2f(window.getSize().x - 235, window.getSize().y - 125),
-        sf::Vector2f(180, 25),
+        sf::Vector2f(
+            window.getSize().x + HELP_PANEL_POS_SHIFT.x,
+            window.getSize().y + HELP_PANEL_POS_SHIFT.y + HELP_PANEL_LINE_SIZE.y),
+        HELP_PANEL_LINE_SIZE,
         "Arrows - rotate",
         17,
-        sf::Color(220, 220, 220),
+        HELP_PANEL_FONT_COLOR,
         sf::Color::Transparent,
-        sf::Color::Transparent,
-        0.0f
+        sf::Color::Transparent
     );
     helpPanel->addElement(std::move(line2));
     
     auto line3 = std::make_unique<TextBox>(
         font,
-        sf::Vector2f(window.getSize().x - 235, window.getSize().y - 100),
-        sf::Vector2f(180, 25),
+        sf::Vector2f(
+            window.getSize().x + HELP_PANEL_POS_SHIFT.x,
+            window.getSize().y + HELP_PANEL_POS_SHIFT.y + HELP_PANEL_LINE_SIZE.y * 2),
+        HELP_PANEL_LINE_SIZE,
         "Shift + ___ - fine movement",
         17,
-        sf::Color(220, 220, 220),
+        HELP_PANEL_FONT_COLOR,
         sf::Color::Transparent,
-        sf::Color::Transparent,
-        0.0f
+        sf::Color::Transparent
     );
     helpPanel->addElement(std::move(line3));
 
     auto line4 = std::make_unique<TextBox>(
         font,
-        sf::Vector2f(window.getSize().x - 235, window.getSize().y - 75),
-        sf::Vector2f(180, 25),
+        sf::Vector2f(
+            window.getSize().x + HELP_PANEL_POS_SHIFT.x,
+            window.getSize().y + HELP_PANEL_POS_SHIFT.y + HELP_PANEL_LINE_SIZE.y * 3),
+        HELP_PANEL_LINE_SIZE,
         "Click - select object",
         17,
-        sf::Color(220, 220, 220),
+        HELP_PANEL_FONT_COLOR,
         sf::Color::Transparent,
-        sf::Color::Transparent,
-        0.0f
+        sf::Color::Transparent
     );
     helpPanel->addElement(std::move(line4));
 
@@ -191,10 +192,7 @@ void Scene::setupEditPanel() {
         sf::Vector2f(20, window.getSize().y - 20),
         sf::Vector2f(300, 340),
         "Exp", "V",
-        PanelDirection::RightUp,
-        sf::Color(50, 50, 70),
-        sf::Color(200, 200, 250),
-        2.0f
+        PanelDirection::RightUp
     );
 
     float baseX = 30;
@@ -216,8 +214,7 @@ void Scene::setupEditPanel() {
     panel->addElement(std::move(nameLabel));
     
     auto nameInput = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH),
-        16, false, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH), 16, false
     );
     nameField = nameInput.get();
     panel->addElement(std::move(nameInput));
@@ -225,29 +222,24 @@ void Scene::setupEditPanel() {
     
     // Position
     auto posLabel = std::make_unique<TextBox>(
-        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
-        "Position", 16, sf::Color::White, sf::Color::Transparent,
-        sf::Color::Transparent, 0
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH), "Position", 16
     );
     panel->addElement(std::move(posLabel));
     
     auto posXin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     posX = posXin.get();
     panel->addElement(std::move(posXin));
     
     auto posYin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     posY = posYin.get();
     panel->addElement(std::move(posYin));
     
     auto posZin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     posZ = posZin.get();
     panel->addElement(std::move(posZin));
@@ -255,29 +247,24 @@ void Scene::setupEditPanel() {
     
     // Velocity
     auto velLabel = std::make_unique<TextBox>(
-        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
-        "Velocity", 16, sf::Color::White, sf::Color::Transparent,
-        sf::Color::Transparent, 0
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH), "Velocity", 16
     );
     panel->addElement(std::move(velLabel));
     
     auto velXin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     velX = velXin.get();
     panel->addElement(std::move(velXin));
     
     auto velYin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     velY = velYin.get();
     panel->addElement(std::move(velYin));
     
     auto velZin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     velZ = velZin.get();
     panel->addElement(std::move(velZin));
@@ -285,15 +272,12 @@ void Scene::setupEditPanel() {
     
     // Mass
     auto massLabel = std::make_unique<TextBox>(
-        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
-        "Mass", 16, sf::Color::White, sf::Color::Transparent,
-        sf::Color::Transparent, 0
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH), "Mass", 16
     );
     panel->addElement(std::move(massLabel));
     
     auto massInput = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH), 14, true
     );
     massField = massInput.get();
     panel->addElement(std::move(massInput));
@@ -301,15 +285,12 @@ void Scene::setupEditPanel() {
     
     // Size
     auto sizeLabel = std::make_unique<TextBox>(
-        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
-        "Size", 16, sf::Color::White, sf::Color::Transparent,
-        sf::Color::Transparent, 0
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH), "Size", 16
     );
     panel->addElement(std::move(sizeLabel));
     
     auto sizeInput = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(fieldW - 10, fieldH), 14, true
     );
     sizeField = sizeInput.get();
     panel->addElement(std::move(sizeInput));
@@ -317,29 +298,24 @@ void Scene::setupEditPanel() {
     
     // Color
     auto colorLabel = std::make_unique<TextBox>(
-        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH),
-        "Color", 16, sf::Color::White, sf::Color::Transparent,
-        sf::Color::Transparent, 0
+        font, sf::Vector2f(labelX, currentY), sf::Vector2f(70, fieldH), "Color", 16
     );
     panel->addElement(std::move(colorLabel));
     
     auto colorRin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     colorR = colorRin.get();
     panel->addElement(std::move(colorRin));
     
     auto colorGin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX + 65, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     colorG = colorGin.get();
     panel->addElement(std::move(colorGin));
     
     auto colorBin = std::make_unique<InputField>(
-        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH),
-        14, true, sf::Color(60, 60, 80), sf::Color::White, sf::Color::Black, 2
+        font, sf::Vector2f(fieldX + 130, currentY), sf::Vector2f(60, fieldH), 14, true
     );
     colorB = colorBin.get();
     panel->addElement(std::move(colorBin));
@@ -428,40 +404,23 @@ void Scene::createObjectFromFields() {
             std::stod(posY->getText()),
             std::stod(posZ->getText())
         );
-    } catch (...) {
-        position = Vector3(0, 0, 0);
-    }
-    
-    try {
+
         velocity = Vector3(
             std::stod(velX->getText()),
             std::stod(velY->getText()),
             std::stod(velZ->getText())
         );
-    } catch (...) {
-        velocity = Vector3(0, 0, 0);
-    }
-    
-    try {
+
         mass = std::stod(massField->getText());
-    } catch (...) {
-        mass = 1.0;
-    }
-    
-    try {
         size = std::stod(sizeField->getText());
-    } catch (...) {
-        size = 0.1;
-    }
-    
-    try {
+
         color = sf::Color(
             std::stoi(colorR->getText()),
             std::stoi(colorG->getText()),
             std::stoi(colorB->getText())
         );
     } catch (...) {
-        color = sf::Color::White;
+        return;
     }
     
     Object newObj(position, velocity, mass, size, color, name);

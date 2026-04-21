@@ -13,6 +13,9 @@ class Scene {
 private:
     float MAX_ZOOM_SPEED = 0.7f;
     float ACCURACY_MULTIPLIER = 0.1f;
+    sf::Vector2f HELP_PANEL_LINE_SIZE = sf::Vector2f(180, 25);
+    sf::Vector2f HELP_PANEL_POS_SHIFT = sf::Vector2f(-235, -150);
+    sf::Color HELP_PANEL_FONT_COLOR = sf::Color(220, 220, 220);
 
     const std::string& dictPath;
     sf::RenderWindow& window;

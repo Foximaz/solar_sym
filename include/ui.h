@@ -193,7 +193,7 @@ public:
         const std::string& expandedText = "V",
         PanelDirection direction = PanelDirection::RightDown,
         sf::Color bgColor = sf::Color(40, 40, 50),
-        sf::Color outlineColor = sf::Color::White,
+        sf::Color outlineColor = sf::Color(150, 150, 200),
         float outlineThickness = 2.0f
     );
 
