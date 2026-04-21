@@ -164,7 +164,7 @@ void Camera::render(std::vector<Object>& objects) {
         if (projectToScreen(object->position, screenPos, scale)) {
             bool show = (object == target) || sqrt(object->mass) * scale > minShow;
             if (show) {
-                float currentIconSize = iconSize * (1 + log(0.01 + object->mass) / 8);
+                float currentIconSize = iconSize * (1 + log(1 + object->mass * scale) * 0.2);
                 bool useIcon = object->size * scale < currentIconSize + ICON_OUTLINE_THICKNESS / 2;
                 
                 float radius;
